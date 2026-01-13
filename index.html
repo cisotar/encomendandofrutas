@@ -6,39 +6,96 @@
     <title>Pedido de Frutas</title>
     <script src="dados.js"></script>
     <style>
-        body { font-family: system-ui, sans-serif; background: #f0f2f5; margin: 0; padding: 10px; }
-        .banner { background: #4361ee; color: white; text-align: center; padding: 20px; border-radius: 12px 12px 0 0; font-size: 22px; font-weight: bold; }
-        .container { max-width: 500px; margin: auto; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); overflow: hidden; }
+        :root { --primary: #4361ee; --success: #28a745; --bg: #f8f9fa; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); margin: 0; padding: 10px; }
+        .container { max-width: 600px; margin: auto; background: white; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); overflow: hidden; }
+        .banner { background: var(--primary); color: white; text-align: center; padding: 20px; font-size: 22px; font-weight: bold; }
         .padding { padding: 15px; }
-        .campo-texto { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
         
-        .item-card { background: #fff; border: 1px solid #d1d9e6; border-radius: 10px; padding: 15px; margin-bottom: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
-        .linha-1 { display: flex; align-items: center; justify-content: space-between; gap: 5px; margin-bottom: 8px; }
-        .nome-prod { font-weight: bold; flex: 1; font-size: 16px; }
-        
-        .controles-qtd { display: flex; align-items: center; gap: 3px; }
-        .btn-qtd { width: 32px; height: 32px; border: 1px solid #ccc; background: #f8f9fa; cursor: pointer; border-radius: 6px; }
-        input[type="number"] { width: 40px; text-align: center; border: 1px solid #ddd; padding: 6px; border-radius: 6px; -moz-appearance: textfield; }
-        input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
+        .secao-cadastro { background: #f1f4ff; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #d0d7f5; }
+        .label-obrigatorio { display: block; font-size: 11px; font-weight: bold; color: #4361ee; margin-bottom: 5px; margin-top: 10px; text-transform: uppercase; }
+        .campo-texto { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
+        .select-pagamento { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; background: white; font-size: 14px; width: 100%; }
 
-        .linha-2 { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-        .grupo-btn { display: flex; gap: 4px; }
-        .opt { padding: 6px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 12px; cursor: pointer; background: #fff; }
-        .opt.ativa { background: #4361ee; color: white; border-color: #4361ee; }
-        
-        .obs-input { width: 100%; padding: 8px; margin-top: 10px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 13px; text-align: center; background: #fcfcfc; }
-        
-        .btn-add { background: #28a745; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 13px; margin-left: auto; font-weight: bold; }
-        
-        /* ESTILO DA CESTA COM BOTÕES */
-        .cesta { margin-top: 20px; padding: 15px; background: #e7f3ff; border-radius: 8px; border-left: 5px solid #4361ee; }
-        .item-cesta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #c8d9eb; padding-bottom: 5px; }
-        .controles-cesta { display: flex; gap: 5px; }
-        .btn-cesta { border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold; color: white; }
-        .btn-edit { background: #ffc107; color: #333; }
-        .btn-del { background: #dc3545; }
+        .item-card { 
+            display: flex; 
+            flex-wrap: wrap; 
+            padding: 15px; 
+            margin-bottom: 15px;
+            border: 2px solid #e0e6ed; 
+            border-radius: 12px;
+            background: #ffffff;
+            gap: 12px; 
+            align-items: flex-start;
+        }
 
-        .btn-finalizar { width: 100%; padding: 16px; background: #4361ee; color: white; border: none; border-radius: 8px; font-weight: bold; margin-top: 10px; cursor: pointer; font-size: 16px; }
+        .img-prod { 
+            width: 75px; 
+            height: 75px; 
+            object-fit: cover; 
+            border-radius: 10px; 
+            background: #f0f0f0; 
+            flex-shrink: 0; 
+        }
+
+        .info-principal { 
+            flex: 1; 
+            min-width: 0; 
+        }
+
+        .nome-prod { 
+            font-weight: bold; 
+            font-size: 17px; 
+            display: block; 
+            margin-bottom: 8px; 
+            color: #2d3436; 
+            white-space: normal; 
+            word-wrap: break-word;
+        }
+
+        .coluna-controles { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            gap: 8px; 
+            flex-shrink: 0; 
+            min-width: 140px; 
+        }
+
+        .largura-total {
+            width: 100%; 
+            margin-top: 5px;
+        }
+
+        .controles-qtd { display: flex; align-items: center; background: #f1f2f6; border-radius: 8px; padding: 2px; }
+        .btn-qtd { width: 30px; height: 30px; border: none; background: transparent; cursor: pointer; font-size: 20px; color: var(--primary); font-weight: bold; }
+        input[type="number"] { width: 35px; text-align: center; border: none; background: transparent; font-weight: bold; font-size: 16px; }
+
+        .grupo-medida { display: flex; gap: 3px; width: 100%; }
+        .opt { 
+            padding: 6px 2px; 
+            border: 1px solid #ddd; 
+            border-radius: 5px; 
+            font-size: 8.5px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            background: #fff; 
+            flex: 1; 
+            text-align: center; 
+        }
+        .opt.ativa { background: var(--primary); color: white; border-color: var(--primary); }
+
+        .linha-maturacao { display: flex; gap: 4px; margin-bottom: 8px; flex-wrap: wrap; }
+        .opt-m { font-size: 10px; padding: 4px 8px; border: 1px solid #eee; border-radius: 5px; cursor: pointer; background: #f9f9f9; font-weight: bold; }
+        .opt-m.ativa { background: #6c757d; color: white; border-color: #6c757d; }
+
+        .obs-input { width: 100%; padding: 10px; border: 1px solid #eee; border-radius: 6px; font-size: 13px; margin-bottom: 8px; box-sizing: border-box; }
+        .btn-add { background: var(--success); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; font-size: 14px; text-transform: uppercase; }
+
+        .cesta { margin-top: 20px; padding: 15px; background: #eef2ff; border-radius: 10px; border: 1px solid #d0d7f5; }
+        .item-cesta-resumo { margin-bottom: 12px; padding-left: 5px; border-left: 3px solid var(--primary); }
+
+        .btn-finalizar { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 10px; font-size: 16px; }
     </style>
 </head>
 <body>
@@ -46,13 +103,28 @@
 <div class="container">
     <div class="banner">LISTA DE COMPRAS</div>
     <div class="padding">
-        <input type="text" id="cliente" class="campo-texto" placeholder="Nome do Cliente">
-        <input type="text" id="busca" class="campo-texto" placeholder="Buscar produto..." onkeyup="renderizar()">
+        <div class="secao-cadastro">
+            <label class="label-obrigatorio">Nome Completo *</label>
+            <input type="text" id="cliente" class="campo-texto">
+            <label class="label-obrigatorio">Número de Telefone *</label>
+            <input type="tel" id="telefone" class="campo-texto" placeholder="(00) 00000-0000">
+            <label class="label-obrigatorio">Endereço Completo *</label>
+            <input type="text" id="endereco" class="campo-texto">
+            <label class="label-obrigatorio">Forma de Pagamento *</label>
+            <select id="pagamento" class="select-pagamento">
+                <option value="">Selecione...</option>
+                <option value="PIX">PIX</option>
+                <option value="Cartão de Crédito">Cartão de Crédito</option>
+                <option value="Cartão de Débito">Cartão de Débito</option>
+            </select>
+        </div>
+
+        <input type="text" id="busca" class="campo-texto" placeholder="Buscar fruta..." onkeyup="renderizar()">
         <div id="lista"></div>
         <div id="cesta-box" class="cesta" style="display:none">
-            <strong>Itens Adicionados:</strong>
-            <div id="lista-cesta" style="font-size:14px; margin-top: 10px;"></div>
-            <button class="btn-finalizar" onclick="processarPedido()">Finalizar e Enviar Pedido</button>
+            <strong>ITENS NA CESTA</strong>
+            <div id="lista-cesta" style="margin: 12px 0; font-size: 14px;"></div>
+            <button class="btn-finalizar" onclick="processarPedido()">FINALIZAR PEDIDO</button>
         </div>
     </div>
 </div>
@@ -75,118 +147,93 @@
     function adicionar(i) {
         let q = parseInt(document.getElementById('q-'+i).value);
         if(q <= 0) return;
-        
         cesta.push({
             id: Date.now(),
             nome: document.getElementById('n-'+i).innerText,
             quantidade: q,
             unidade: document.getElementById('val-u-'+i).value,
             maturacao: document.getElementById('val-m-'+i).value,
-            observacao: document.getElementById('obs-'+i).value,
-            indiceOriginal: i // Para facilitar a re-edição
+            observacao: document.getElementById('obs-'+i).value
         });
-        
         document.getElementById('q-'+i).value = 0;
         document.getElementById('obs-'+i).value = "";
         atualizarCesta();
     }
 
-    function removerItem(id) {
-        cesta = cesta.filter(it => it.id !== id);
-        atualizarCesta();
-    }
-
-    function editarItem(id) {
-        let item = cesta.find(it => it.id === id);
-        if(item) {
-            // Devolve os valores para o card original
-            document.getElementById('q-'+item.indiceOriginal).value = item.quantidade;
-            document.getElementById('obs-'+item.indiceOriginal).value = item.observacao;
-            // Remove da cesta para "substituir" ao adicionar de novo
-            removerItem(id);
-            // Faz scroll até o item para o cliente ver que voltou para edição
-            document.getElementById('n-'+item.indiceOriginal).scrollIntoView({behavior: "smooth", block: "center"});
-        }
-    }
-
     function atualizarCesta() {
-        let box = document.getElementById('cesta-box');
-        let lista = document.getElementById('lista-cesta');
+        const box = document.getElementById('cesta-box');
         if(cesta.length === 0) { box.style.display = 'none'; return; }
         box.style.display = 'block';
         
-        lista.innerHTML = cesta.map(it => `
-            <div class="item-cesta">
-                <span><b>${it.quantidade}${it.unidade}</b> ${it.nome} (${it.maturacao})</span>
-                <div class="controles-cesta">
-                    <button class="btn-cesta btn-edit" onclick="editarItem(${it.id})">Editar</button>
-                    <button class="btn-cesta btn-del" onclick="removerItem(${it.id})">X</button>
-                </div>
+        document.getElementById('lista-cesta').innerHTML = cesta.map(it => `
+            <div class="item-cesta-resumo">
+                • <b>${it.nome.toUpperCase()}</b> - <b>${it.quantidade} ${it.unidade}</b><br>
+                • ${it.maturacao}<br>
+                ${it.observacao ? '• ' + it.observacao : ''}
             </div>
         `).join('');
     }
 
     async function processarPedido() {
         let nome = document.getElementById('cliente').value.trim();
-        if(!nome) return alert("Digite o nome do cliente!");
+        let tel = document.getElementById('telefone').value.trim();
+        let end = document.getElementById('endereco').value.trim();
+        let pag = document.getElementById('pagamento').value;
 
-        const URL_PLANILHA = "https://script.google.com/macros/s/AKfycbwHOKOL2klFNyTAu_r4JJ8Fbh3zCUXZttSQP-OgIQ7wyZGak-5uk3qufyfIjmSQBDXWWQ/exec"; // Substitua pela sua URL do Apps Script
-        
-        let listaFormatada = cesta.map(it => `${it.quantidade}${it.unidade} ${it.nome} (${it.maturacao})${it.observacao ? ' [Obs: '+it.observacao+']' : ''}`).join(', ');
+        if(!nome || !tel || !end || !pag || cesta.length === 0) {
+            alert("ERRO: Preencha todos os dados e adicione itens na cesta.");
+            return;
+        }
 
-        try {
-            await fetch(URL_PLANILHA, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: JSON.stringify({ usuario: nome, cesta: listaFormatada })
-            });
+        const URL_PLANILHA = "SUA_URL_AQUI"; 
+        const dadosPlanilha = { nome, telefone: tel, endereco: end, pagamento: pag, itens: cesta };
+        fetch(URL_PLANILHA, { method: 'POST', mode: 'no-cors', body: JSON.stringify(dadosPlanilha) }).catch(e => {});
 
-            let msg = `*NOVO PEDIDO DE COMPRAS*\n------------------------------------------\n*Cliente:* ${nome}\n*Data:* ${new Date().toLocaleDateString('pt-BR')}\n------------------------------------------\n\n`;
-            cesta.forEach(it => {
-                msg += `*${it.quantidade}${it.unidade}* de ${it.nome}\n_Ponto: ${it.maturacao}_\n${it.observacao ? '_Obs: '+it.observacao+'_\n' : ''}\n`;
-            });
-            msg += `------------------------------------------\n_Gerado via Sistema de Pedidos_`;
+        let msg = `*RESUMO DO PEDIDO*\n\n*DADOS DO CLIENTE*\nNOME: ${nome}\nTELEFONE: ${tel}\nENDEREÇO: ${end}\nPAGAMENTO: ${pag}\n\n*LISTA DE COMPRAS*\n`;
+        cesta.forEach(it => {
+            msg += `• *${it.nome.toUpperCase()}* - *${it.quantidade} ${it.unidade}*\n• ${it.maturacao}\n${it.observacao ? '• '+it.observacao+'\n' : ''}--------------------------\n`;
+        });
 
-            window.open(`https://api.whatsapp.com/send?phone=5511949406898&text=${encodeURIComponent(msg)}`, '_blank');
-            
-            alert("Pedido enviado!");
-            cesta = [];
-            atualizarCesta();
-        } catch (e) { alert("Erro ao processar."); }
+        window.open(`https://api.whatsapp.com/send?phone=5511949406898&text=${encodeURIComponent(msg)}`);
+        cesta = []; atualizarCesta();
     }
 
     function renderizar() {
         let f = document.getElementById('busca').value.toLowerCase();
         let html = "";
-        catalogo.filter(it => it.toLowerCase().includes(f)).forEach(it => {
-            let i = catalogo.indexOf(it);
-            html += `
-            <div class="item-card">
-                <div class="linha-1">
-                    <span class="nome-prod" id="n-${i}">${it}</span>
-                    <div class="controles-qtd">
-                        <button class="btn-qtd" onclick="qtd(${i},-1)">-</button>
-                        <input type="number" id="q-${i}" value="0">
-                        <button class="btn-qtd" onclick="qtd(${i},1)">+</button>
+        catalogo.forEach((item, i) => {
+            if (item.nome.toLowerCase().includes(f)) {
+                html += `
+                <div class="item-card">
+                    <img src="${item.img}" class="img-prod" onerror="this.src='https://via.placeholder.com/80'">
+                    <div class="info-principal">
+                        <span class="nome-prod" id="n-${i}">${item.nome}</span>
+                        <div class="linha-maturacao">
+                            <input type="hidden" id="val-m-${i}" value="No ponto">
+                            <div class="opt-m ativa opt-m-${i}" onclick="selecionar('m',${i},'No ponto')">Ponto</div>
+                            <div class="opt-m opt-m-${i}" onclick="selecionar('m',${i},'Maduro')">Maduro</div>
+                            <div class="opt-m opt-m-${i}" onclick="selecionar('m',${i},'Verde')">Verde</div>
+                        </div>
                     </div>
-                    <div class="grupo-btn">
-                        <input type="hidden" id="val-u-${i}" value="unidade">
-                        <div class="opt ativa opt-u-${i}" onclick="selecionar('u',${i},'unidade')">un</div>
-                        <div class="opt opt-u-${i}" onclick="selecionar('u',${i},'kg')">kg</div>
-                        <div class="opt opt-u-${i}" onclick="selecionar('u',${i},'caixa')">cx</div>
+                    <div class="coluna-controles">
+                        <div class="controles-qtd">
+                            <button class="btn-qtd" onclick="qtd(${i},-1)">-</button>
+                            <input type="number" id="q-${i}" value="0" readonly>
+                            <button class="btn-qtd" onclick="qtd(${i},1)">+</button>
+                        </div>
+                        <div class="grupo-medida">
+                            <input type="hidden" id="val-u-${i}" value="UNIDADE">
+                            <div class="opt ativa opt-u-${i}" onclick="selecionar('u',${i},'UNIDADE')">UNIDADE</div>
+                            <div class="opt opt-u-${i}" onclick="selecionar('u',${i},'QUILOGRAMA')">QUILOGRAMA</div>
+                            <div class="opt opt-u-${i}" onclick="selecionar('u',${i},'CAIXA')">CAIXA</div>
+                        </div>
                     </div>
-                </div>
-                <div class="linha-2">
-                    <div class="grupo-btn">
-                        <input type="hidden" id="val-m-${i}" value="No ponto">
-                        <div class="opt ativa opt-m-${i}" onclick="selecionar('m',${i},'No ponto')">No ponto</div>
-                        <div class="opt opt-m-${i}" onclick="selecionar('m',${i},'Maduro')">Maduro</div>
-                        <div class="opt opt-m-${i}" onclick="selecionar('m',${i},'Verde')">Verde</div>
+                    <div class="largura-total">
+                        <input type="text" id="obs-${i}" class="obs-input" placeholder="Observação...">
+                        <button class="btn-add" onclick="adicionar(${i})">ADICIONAR</button>
                     </div>
-                    <button class="btn-add" onclick="adicionar(${i})">Adicionar</button>
-                </div>
-                <input type="text" id="obs-${i}" class="obs-input" placeholder="Observação">
-            </div>`;
+                </div>`;
+            }
         });
         document.getElementById('lista').innerHTML = html;
     }
