@@ -22,7 +22,6 @@
         .banner { background: var(--primary); color: white; text-align: center; padding: 20px; font-size: 22px; font-weight: bold; }
         .padding { padding: 15px; }
         
-        /* Modal de Ampliação */
         #modal-imagem {
             display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%;
             background-color: rgba(0,0,0,0.8); align-items: center; justify-content: center;
@@ -55,7 +54,7 @@
         .secao-cadastro { background: #f1f4ff; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #d0d7f5; }
         .label-obrigatorio { display: block; font-size: 11px; font-weight: bold; color: #4361ee; margin-bottom: 5px; margin-top: 10px; text-transform: uppercase; }
         .campo-texto { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 14px; margin-bottom: 5px; }
-        .select-pagamento { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; background: white; font-size: 14px; }
+        .select-pagamento { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; background: white; font-size: 14px; margin-bottom: 10px; }
 
         .item-card { 
             display: flex; flex-wrap: wrap; padding: 15px; margin-bottom: 15px;
@@ -77,9 +76,7 @@
             align-items: center; justify-content: center; line-height: 1; padding: 0;
         }
 
-        /* Imagem aumentada e com cursor de lupa */
-        .img-prod { width: 110px; height: 110px; object-fit: cover; border-radius: 10px; background: #f0f0f0; flex-shrink: 0; cursor: zoom-in; transition: transform 0.2s; }
-        .img-prod:hover { transform: scale(1.03); }
+        .img-prod { width: 110px; height: 110px; object-fit: cover; border-radius: 10px; background: #f0f0f0; flex-shrink: 0; cursor: zoom-in; }
 
         .info-principal { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: flex-start; }
         .nome-prod { font-weight: bold; font-size: 18px; display: block; margin-bottom: 5px; color: #2d3436; width: 100%; }
@@ -115,7 +112,8 @@
             .main-wrapper { flex-direction: column; align-items: center; }
             .container { width: 100%; }
             .coluna-controles { border-left: none; padding-left: 0; align-items: flex-end; }
-            .img-prod { width: 100px; height: 100px; }
+            /* Imagem retorna ao tamanho antigo no celular */
+            .img-prod { width: 75px; height: 75px; }
         }
     </style>
 </head>
@@ -123,7 +121,7 @@
 
 <div id="modal-imagem" onclick="this.style.display='none'">
     <span class="fechar-modal">&times;</span>
-    <img id="img-expandida" src="" alt="Imagem ampliada">
+    <img id="img-expandida" src="">
 </div>
 
 <div id="notificacao">Item adicionado com sucesso!</div>
@@ -146,7 +144,14 @@
                     <option value="Cartão de Crédito">Cartão de Crédito</option>
                     <option value="Cartão de Débito">Cartão de Débito</option>
                 </select>
+                
+                <label class="label-obrigatorio">Enviar Pedido para: *</label>
+                <select id="destino-whatsapp" class="select-pagamento">
+                    <option value="5511999448479">Banca da Andreia (+55 11 99944-8479)</option>
+                    <option value="55119949406898">Tão (+55 11 99494-06898)</option>
+                </select>
             </div>
+
             <input type="text" id="busca" class="campo-texto" placeholder="Buscar fruta..." onkeyup="renderizar()">
             <div id="lista"></div>
         </div>
@@ -167,7 +172,6 @@
     let catalogo = typeof itensIniciais !== 'undefined' ? itensIniciais : [];
     let cesta = [];
 
-    // Função para abrir o modal
     function abrirModal(src) {
         const modal = document.getElementById('modal-imagem');
         const img = document.getElementById('img-expandida');
@@ -196,6 +200,7 @@
         let q = parseInt(document.getElementById('q-'+i).value);
         if(q <= 0) return;
         let nomeItem = document.getElementById('n-'+i).innerText;
+        
         cesta.push({
             idUnico: Date.now(),
             idCatalogo: i,
@@ -205,6 +210,7 @@
             maturacao: document.getElementById('val-m-'+i).value,
             observacao: document.getElementById('obs-'+i).value
         });
+        
         mostrarNotificacao(`${nomeItem} adicionado!`);
         document.getElementById('q-'+i).value = 0;
         document.getElementById('obs-'+i).value = "";
@@ -219,11 +225,13 @@
     function atualizarCesta() {
         const box = document.getElementById('cesta-box');
         const rodape = document.getElementById('rodape-finalizar');
+        
         if(cesta.length === 0) { 
             box.style.display = 'none'; rodape.style.display = 'none';
             document.querySelectorAll('.container-baloes').forEach(el => el.innerHTML = '');
             return; 
         }
+        
         box.style.display = 'block'; rodape.style.display = 'block';
         document.querySelectorAll('.container-baloes').forEach(el => el.innerHTML = '');
         cesta.forEach(it => {
@@ -235,6 +243,7 @@
                 container.appendChild(balao);
             }
         });
+
         document.getElementById('lista-cesta').innerHTML = cesta.map(it => `
             <div class="item-cesta-wrapper">
                 <div>• <b>${it.nome.toUpperCase()}</b> - <b>${it.quantidade} ${it.unidade}</b><br>• ${it.maturacao}<br>${it.observacao ? '• ' + it.observacao : ''}</div>
@@ -247,10 +256,19 @@
         let tel = document.getElementById('telefone').value.trim();
         let end = document.getElementById('endereco').value.trim();
         let pag = document.getElementById('pagamento').value;
-        if(!nome || !tel || !end || !pag || cesta.length === 0) { alert("ERRO: Preencha todos os dados."); return; }
-        let msg = `*RESUMO DO PEDIDO*\n\n*CLIENTE*\n${nome}\n${tel}\n${end}\n${pag}\n\n*ITENS*\n`;
-        cesta.forEach(it => { msg += `• *${it.nome.toUpperCase()}* - ${it.quantidade} ${it.unidade}\n• ${it.maturacao}\n${it.observacao ? '• '+it.observacao+'\n' : ''}---\n`; });
-        window.open(`https://api.whatsapp.com/send?phone=5511949406898&text=${encodeURIComponent(msg)}`);
+        let destino = document.getElementById('destino-whatsapp').value;
+
+        if(!nome || !tel || !end || !pag || cesta.length === 0) {
+            alert("ERRO: Preencha todos os dados e adicione itens na cesta.");
+            return;
+        }
+
+        let msg = `*RESUMO DO PEDIDO*\n\n*CLIENTE*\nNOME: ${nome}\nFONE: ${tel}\nEND: ${end}\nPAG: ${pag}\n\n*ITENS*\n`;
+        cesta.forEach(it => {
+            msg += `• *${it.nome.toUpperCase()}* - ${it.quantidade} ${it.unidade}\n• ${it.maturacao}\n${it.observacao ? '• '+it.observacao+'\n' : ''}------------------\n`;
+        });
+
+        window.open(`https://api.whatsapp.com/send?phone=${destino}&text=${encodeURIComponent(msg)}`);
         cesta = []; atualizarCesta();
     }
 
@@ -262,7 +280,7 @@
                 html += `
                 <div class="item-card">
                     <span class="nome-prod" id="n-${i}">${item.nome}</span>
-                    <img src="${item.img}" class="img-prod" onclick="abrirModal('${item.img}')" onerror="this.src='https://via.placeholder.com/110'">
+                    <img src="${item.img}" class="img-prod" onclick="abrirModal('${item.img}')" onerror="this.src='https://via.placeholder.com/80'">
                     <div class="info-principal"><div class="container-baloes" id="baloes-${i}"></div></div>
                     <div class="coluna-controles">
                         <div class="controles-qtd">
@@ -273,7 +291,7 @@
                         <div class="grupo-medida">
                             <input type="hidden" id="val-u-${i}" value="UNIDADE">
                             <div class="opt ativa opt-u-${i}" onclick="selecionar('u',${i},'UNIDADE')">UNIDADE</div>
-                            <div class="opt opt-u-${i}" onclick="selecionar('u',${i},'QUILOGRAMA')">QUILOGRAMA</div>
+                            <div class="opt opt-u-${i}" onclick="selecionar('u',${i},'KG')">KG</div>
                             <div class="opt opt-u-${i}" onclick="selecionar('u',${i},'CAIXA')">CAIXA</div>
                         </div>
                         <div class="linha-maturacao">
