@@ -6,19 +6,19 @@
     <title>Pedido de Frutas</title>
     <script src="dados.js"></script>
     <style>
-        :root { --primary: #4361ee; --success: #28a745; --danger: #dc3545; --bg: #f8f9fa; }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); margin: 0; padding: 10px; }
+        :root { --primary: #4361ee; --success: #2ecc71; --danger: #dc3545; --bg: #f8f9fa; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); margin: 0; padding: 10px; padding-bottom: 90px; }
         
-        /* Layout Flex para suportar a lateral no Desktop */
         .main-wrapper { 
             display: flex; 
-            max-width: 1000px; 
+            max-width: 1100px; 
             margin: auto; 
             gap: 20px; 
             align-items: flex-start;
+            justify-content: center;
         }
 
-        .container { flex: 1; min-width: 0; background: white; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); overflow: hidden; }
+        .container { width: 650px; flex-shrink: 0; background: white; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); overflow: hidden; }
         .banner { background: var(--primary); color: white; text-align: center; padding: 20px; font-size: 22px; font-weight: bold; }
         .padding { padding: 15px; }
         
@@ -35,6 +35,12 @@
             100% { opacity: 0; top: 10px; }
         }
 
+        #rodape-finalizar {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: white; padding: 15px; box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
+            display: none; z-index: 999; box-sizing: border-box; text-align: center;
+        }
+
         .secao-cadastro { background: #f1f4ff; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #d0d7f5; }
         .label-obrigatorio { display: block; font-size: 11px; font-weight: bold; color: #4361ee; margin-bottom: 5px; margin-top: 10px; text-transform: uppercase; }
         .campo-texto { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 14px; margin-bottom: 5px; }
@@ -43,59 +49,62 @@
         .item-card { 
             display: flex; flex-wrap: wrap; padding: 15px; margin-bottom: 15px;
             border: 2px solid #e0e6ed; border-radius: 12px; background: #ffffff;
-            gap: 12px; align-items: flex-start; position: relative;
+            gap: 12px; align-items: stretch; position: relative;
         }
 
-        .container-baloes { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
+        .container-baloes { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; width: 100%; }
+        
         .balao-historico {
-            background: #eef2ff; color: #4361ee; font-size: 9px; font-weight: bold;
-            padding: 2px 6px; border-radius: 10px; border: 1px solid #4361ee;
+            background: #eef2ff; color: #4361ee; font-size: 11px; font-weight: bold;
+            padding: 5px 12px; border-radius: 20px; border: 1px solid #4361ee;
+            display: flex; align-items: center; gap: 8px;
         }
+        
+        .btn-remover-balao {
+            background: var(--danger); color: white; border: none; width: 18px; height: 18px;
+            border-radius: 50%; font-size: 10px; cursor: pointer; display: flex;
+            align-items: center; justify-content: center; line-height: 1; padding: 0;
+            transition: transform 0.1s;
+        }
+        .btn-remover-balao:active { transform: scale(0.9); }
 
-        .img-prod { width: 75px; height: 75px; object-fit: cover; border-radius: 10px; background: #f0f0f0; flex-shrink: 0; }
-        .info-principal { flex: 1; min-width: 0; }
-        .nome-prod { font-weight: bold; font-size: 17px; display: block; margin-bottom: 8px; color: #2d3436; }
+        .img-prod { width: 85px; height: 85px; object-fit: cover; border-radius: 10px; background: #f0f0f0; flex-shrink: 0; }
+        .info-principal { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: flex-start; }
+        .nome-prod { font-weight: bold; font-size: 18px; display: block; margin-bottom: 10px; color: #2d3436; width: 100%; }
 
-        .coluna-controles { display: flex; flex-direction: column; align-items: center; gap: 8px; flex-shrink: 0; min-width: 140px; }
-        .largura-total { width: 100%; margin-top: 5px; }
+        .coluna-controles { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; flex-shrink: 0; min-width: 150px; border-left: 1px solid #f0f0f0; padding-left: 12px; }
+        .largura-total { width: 100%; margin-top: 10px; }
 
-        .controles-qtd { display: flex; align-items: center; background: #f1f2f6; border-radius: 8px; padding: 2px; }
-        .btn-qtd { width: 30px; height: 30px; border: none; background: transparent; cursor: pointer; font-size: 20px; color: var(--primary); font-weight: bold; }
-        input[type="number"] { width: 35px; text-align: center; border: none; background: transparent; font-weight: bold; font-size: 16px; }
+        .controles-qtd { display: flex; align-items: center; background: #f1f2f6; border-radius: 8px; padding: 3px; }
+        .btn-qtd { width: 35px; height: 35px; border: none; background: transparent; cursor: pointer; font-size: 22px; color: var(--primary); font-weight: bold; }
+        input[type="number"] { width: 40px; text-align: center; border: none; background: transparent; font-weight: bold; font-size: 17px; }
 
-        .grupo-medida { display: flex; gap: 3px; width: 100%; }
-        .opt { padding: 6px 2px; border: 1px solid #ddd; border-radius: 5px; font-size: 8.5px; cursor: pointer; font-weight: bold; background: #fff; flex: 1; text-align: center; }
+        .grupo-medida { display: flex; gap: 4px; width: 100%; }
+        .opt { padding: 8px 2px; border: 1px solid #ddd; border-radius: 6px; font-size: 10px; cursor: pointer; font-weight: bold; background: #fff; flex: 1; text-align: center; }
         .opt.ativa { background: var(--primary); color: white; border-color: var(--primary); }
 
-        .linha-maturacao { display: flex; gap: 4px; margin-bottom: 2px; flex-wrap: wrap; }
-        .opt-m { font-size: 10px; padding: 4px 8px; border: 1px solid #eee; border-radius: 5px; cursor: pointer; background: #f9f9f9; font-weight: bold; }
+        .linha-maturacao { display: flex; gap: 6px; margin-bottom: 2px; flex-wrap: wrap; }
+        .opt-m { font-size: 12px; padding: 6px 12px; border: 1px solid #eee; border-radius: 6px; cursor: pointer; background: #f9f9f9; font-weight: bold; }
         .opt-m.ativa { background: #6c757d; color: white; border-color: #6c757d; }
 
-        .obs-input { width: 100%; padding: 10px; border: 1px solid #eee; border-radius: 6px; font-size: 13px; margin-bottom: 8px; box-sizing: border-box; }
-        .btn-add { background: var(--success); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; font-size: 14px; text-transform: uppercase; }
+        .obs-input { width: 100%; padding: 12px; border: 1px solid #eee; border-radius: 8px; font-size: 13px; margin-bottom: 10px; box-sizing: border-box; }
+        .btn-add { background: var(--success); color: white; border: none; padding: 14px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
 
-        /* Estilo da Cesta */
-        .cesta { margin-top: 20px; padding: 15px; background: #eef2ff; border-radius: 10px; border: 1px solid #d0d7f5; }
-        .item-cesta-wrapper { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-left: 3px solid var(--primary); padding-left: 8px; }
-        .btn-excluir { background: var(--danger); color: white; border: none; padding: 6px 12px; border-radius: 20px; font-size: 11px; cursor: pointer; font-weight: bold; }
-        .btn-finalizar { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 10px; font-size: 16px; }
+        .cesta { margin-top: 20px; padding: 15px; background: #eef2ff; border-radius: 12px; border: 1px solid #d0d7f5; }
+        .item-cesta-wrapper { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-left: 4px solid var(--primary); padding-left: 10px; }
+        .btn-excluir { background: var(--danger); color: white; border: none; padding: 7px 14px; border-radius: 20px; font-size: 11px; cursor: pointer; font-weight: bold; }
+        .btn-finalizar { width: 100%; max-width: 600px; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 16px; text-transform: uppercase; }
 
-        /* CONFIGURAÇÃO PARA COMPUTADOR (DESKTOP) */
         @media (min-width: 850px) {
-            .cesta { 
-                margin-top: 0; 
-                width: 320px; 
-                position: sticky; 
-                top: 10px; 
-                max-height: 90vh; 
-                overflow-y: auto; 
-            }
+            .cesta { margin-top: 0; width: 320px; position: sticky; top: 10px; max-height: 80vh; overflow-y: auto; }
         }
 
-        /* Ajuste para telas pequenas */
         @media (max-width: 849px) {
-            .main-wrapper { flex-direction: column; }
-            .cesta { width: auto; margin-bottom: 20px; }
+            .main-wrapper { flex-direction: column; align-items: center; }
+            .container { width: 100%; }
+            .item-card { flex-direction: row; align-items: flex-start; }
+            .nome-prod { width: 100%; border-bottom: 2px solid #f8f9fa; padding-bottom: 8px; }
+            .coluna-controles { border-left: none; padding-left: 0; align-items: flex-end; }
         }
     </style>
 </head>
@@ -135,6 +144,10 @@
     </div>
 </div>
 
+<div id="rodape-finalizar">
+    <button class="btn-finalizar" onclick="processarPedido()">FINALIZAR PEDIDO</button>
+</div>
+
 <script>
     let catalogo = typeof itensIniciais !== 'undefined' ? itensIniciais : [];
     let cesta = [];
@@ -159,16 +172,14 @@
     function adicionar(i) {
         let q = parseInt(document.getElementById('q-'+i).value);
         if(q <= 0) return;
-        
         let nomeItem = document.getElementById('n-'+i).innerText;
-        let unidade = document.getElementById('val-u-'+i).value;
         
         cesta.push({
             idUnico: Date.now(),
             idCatalogo: i,
             nome: nomeItem,
             quantidade: q,
-            unidade: unidade,
+            unidade: document.getElementById('val-u-'+i).value,
             maturacao: document.getElementById('val-m-'+i).value,
             observacao: document.getElementById('obs-'+i).value
         });
@@ -186,12 +197,17 @@
 
     function atualizarCesta() {
         const box = document.getElementById('cesta-box');
+        const rodape = document.getElementById('rodape-finalizar');
+        
         if(cesta.length === 0) { 
             box.style.display = 'none';
+            rodape.style.display = 'none';
             document.querySelectorAll('.container-baloes').forEach(el => el.innerHTML = '');
             return; 
         }
+        
         box.style.display = 'block';
+        rodape.style.display = 'block';
         
         document.querySelectorAll('.container-baloes').forEach(el => el.innerHTML = '');
         cesta.forEach(it => {
@@ -199,7 +215,10 @@
             if(container) {
                 let balao = document.createElement('div');
                 balao.className = 'balao-historico';
-                balao.innerText = `${it.quantidade} ${it.unidade} ADICIONADO`;
+                balao.innerHTML = `
+                    <span>${it.quantidade} ${it.unidade}</span>
+                    <button class="btn-remover-balao" title="Remover" onclick="excluirItem(${it.idUnico})">✕</button>
+                `;
                 container.appendChild(balao);
             }
         });
@@ -243,9 +262,9 @@
             if (item.nome.toLowerCase().includes(f)) {
                 html += `
                 <div class="item-card">
+                    <span class="nome-prod" id="n-${i}">${item.nome}</span>
                     <img src="${item.img}" class="img-prod" onerror="this.src='https://via.placeholder.com/80'">
                     <div class="info-principal">
-                        <span class="nome-prod" id="n-${i}">${item.nome}</span>
                         <div class="linha-maturacao">
                             <input type="hidden" id="val-m-${i}" value="No ponto">
                             <div class="opt-m ativa opt-m-${i}" onclick="selecionar('m',${i},'No ponto')">Ponto</div>
