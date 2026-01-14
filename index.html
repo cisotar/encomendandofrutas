@@ -9,127 +9,68 @@
         :root { --primary: #4361ee; --success: #2ecc71; --danger: #dc3545; --bg: #f8f9fa; }
         body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); margin: 0; padding: 10px; padding-bottom: 90px; }
         
-        .main-wrapper { 
-            display: flex; 
-            max-width: 1100px; 
-            margin: auto; 
-            gap: 20px; 
-            align-items: flex-start;
-            justify-content: center;
-        }
-
+        .main-wrapper { display: flex; max-width: 1100px; margin: auto; gap: 20px; justify-content: center; align-items: flex-start; }
         .container { width: 650px; flex-shrink: 0; background: white; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); overflow: hidden; }
         .banner { background: var(--primary); color: white; text-align: center; padding: 20px; font-size: 22px; font-weight: bold; }
         .padding { padding: 15px; }
         
-        #modal-imagem {
-            display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.8); align-items: center; justify-content: center;
-        }
-        #img-expandida {
-            max-width: 90%; max-height: 90%; border-radius: 8px; border: 3px solid white;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5); object-fit: contain;
-        }
-        .fechar-modal { position: absolute; top: 20px; right: 30px; color: white; font-size: 40px; font-weight: bold; cursor: pointer; }
+        #modal-imagem { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); align-items: center; justify-content: center; }
+        #img-expandida { max-width: 90%; max-height: 90%; border-radius: 8px; border: 3px solid white; object-fit: contain; }
 
-        #notificacao {
-            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-            background: #4361ee; color: white; padding: 12px 25px; border-radius: 30px;
-            font-size: 14px; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            display: none; z-index: 1000; animation: fadeInOut 2.5s ease-in-out;
-        }
-        @keyframes fadeInOut {
-            0% { opacity: 0; top: 10px; }
-            15% { opacity: 1; top: 20px; }
-            85% { opacity: 1; top: 20px; }
-            100% { opacity: 0; top: 10px; }
-        }
+        #notificacao { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #4361ee; color: white; padding: 12px 25px; border-radius: 30px; display: none; z-index: 1000; animation: fadeInOut 2.5s ease-in-out; }
+        @keyframes fadeInOut { 0%, 100% { opacity: 0; } 15%, 85% { opacity: 1; } }
 
-        #rodape-finalizar {
-            position: fixed; bottom: 0; left: 0; width: 100%;
-            background: white; padding: 15px; box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
-            display: none; z-index: 999; box-sizing: border-box; text-align: center;
-        }
+        #rodape-finalizar { position: fixed; bottom: 0; left: 0; width: 100%; background: white; padding: 15px; box-shadow: 0 -4px 15px rgba(0,0,0,0.1); display: none; z-index: 999; box-sizing: border-box; text-align: center; }
 
         .secao-cadastro { background: #f1f4ff; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #d0d7f5; }
-        .label-obrigatorio { display: block; font-size: 11px; font-weight: bold; color: #4361ee; margin-bottom: 5px; margin-top: 10px; text-transform: uppercase; }
-        .campo-texto { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 14px; margin-bottom: 5px; }
-        .select-pagamento { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; background: white; font-size: 14px; margin-bottom: 10px; }
+        .label-obrigatorio { display: block; font-size: 11px; font-weight: bold; color: #4361ee; margin: 10px 0 5px; text-transform: uppercase; }
+        .campo-texto, .select-pagamento { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
 
-        .item-card { 
-            display: flex; flex-wrap: wrap; padding: 15px; margin-bottom: 15px;
-            border: 2px solid #e0e6ed; border-radius: 12px; background: #ffffff;
-            gap: 12px; align-items: stretch; position: relative;
-        }
+        .item-card { display: flex; flex-wrap: wrap; padding: 15px; margin-bottom: 15px; border: 2px solid #e0e6ed; border-radius: 12px; background: white; gap: 10px; }
+        .nome-prod { font-weight: bold; font-size: 18px; color: #2d3436; width: 100%; margin-bottom: 5px; }
 
-        .container-baloes { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; width: 100%; }
+        .img-prod { width: 110px; height: 110px; object-fit: cover; border-radius: 10px; cursor: zoom-in; flex-shrink: 0; }
         
-        .balao-historico {
-            background: #eef2ff; color: #4361ee; font-size: 11px; font-weight: bold;
-            padding: 5px 12px; border-radius: 20px; border: 1px solid #4361ee;
-            display: flex; align-items: center; gap: 8px;
-        }
-        
-        .btn-remover-balao {
-            background: var(--danger); color: white; border: none; width: 18px; height: 18px;
-            border-radius: 50%; font-size: 10px; cursor: pointer; display: flex;
-            align-items: center; justify-content: center; line-height: 1; padding: 0;
-        }
-
-        .img-prod { width: 110px; height: 110px; object-fit: cover; border-radius: 10px; background: #f0f0f0; flex-shrink: 0; cursor: zoom-in; }
-
-        .info-principal { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: flex-start; }
-        .nome-prod { font-weight: bold; font-size: 18px; display: block; margin-bottom: 5px; color: #2d3436; width: 100%; }
-
-        .coluna-controles { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; flex-shrink: 0; min-width: 150px; border-left: 1px solid #f0f0f0; padding-left: 12px; }
-        .largura-total { width: 100%; margin-top: 10px; display: flex; flex-direction: column; }
-
-        .controles-qtd { display: flex; align-items: center; background: #f1f2f6; border-radius: 8px; padding: 3px; }
+        .coluna-controles { flex: 1; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; min-width: 160px; }
+        .controles-qtd { display: flex; align-items: center; background: #f1f2f6; border-radius: 8px; padding: 2px; }
         .btn-qtd { width: 35px; height: 35px; border: none; background: transparent; cursor: pointer; font-size: 22px; color: var(--primary); font-weight: bold; }
         input[type="number"] { width: 40px; text-align: center; border: none; background: transparent; font-weight: bold; font-size: 17px; }
 
-        .grupo-medida { display: flex; gap: 4px; width: 100%; }
-        .opt { padding: 8px 2px; border: 1px solid #ddd; border-radius: 6px; font-size: 9px; cursor: pointer; font-weight: bold; background: #fff; flex: 1; text-align: center; }
+        .grupo-medida, .linha-maturacao { display: flex; gap: 4px; width: 100%; justify-content: flex-end; }
+        .opt, .opt-m { padding: 8px 4px; border: 1px solid #ddd; border-radius: 6px; font-size: 9px; cursor: pointer; font-weight: bold; background: #fff; flex: 1; text-align: center; max-width: 80px; }
         .opt.ativa { background: var(--primary); color: white; border-color: var(--primary); }
-
-        .linha-maturacao { display: flex; gap: 4px; width: 100%; flex-wrap: wrap; }
-        .opt-m { font-size: 10px; padding: 6px 4px; border: 1px solid #eee; border-radius: 6px; cursor: pointer; background: #f9f9f9; font-weight: bold; flex: 1; text-align: center; }
         .opt-m.ativa { background: #6c757d; color: white; border-color: #6c757d; }
 
-        .obs-input { width: 100%; padding: 12px; border: 1px solid #eee; border-radius: 8px; font-size: 13px; margin-bottom: 10px; box-sizing: border-box; }
-        .btn-add { background: var(--success); color: white; border: none; padding: 14px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; font-size: 14px; text-transform: uppercase; }
+        .container-baloes { display: flex; flex-wrap: wrap; gap: 6px; width: 100%; margin: 5px 0; }
+        .balao-historico { background: #eef2ff; color: #4361ee; font-size: 11px; font-weight: bold; padding: 5px 12px; border-radius: 20px; border: 1px solid #4361ee; display: flex; align-items: center; gap: 8px; }
+        .btn-remover-balao { background: var(--danger); color: white; border: none; width: 18px; height: 18px; border-radius: 50%; font-size: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
-        .cesta { margin-top: 20px; padding: 15px; background: #eef2ff; border-radius: 12px; border: 1px solid #d0d7f5; }
-        .item-cesta-wrapper { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-left: 4px solid var(--primary); padding-left: 10px; }
+        .largura-total { width: 100%; }
+        .obs-input { width: 100%; padding: 12px; border: 1px solid #eee; border-radius: 8px; margin: 10px 0; box-sizing: border-box; }
+        .btn-add { background: var(--success); color: white; border: none; padding: 14px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; text-transform: uppercase; }
+
+        /* Estilos da Cesta Recuperados */
+        .cesta { padding: 15px; background: #eef2ff; border-radius: 12px; border: 1px solid #d0d7f5; width: 320px; position: sticky; top: 10px; max-height: 85vh; overflow-y: auto; }
+        .item-cesta-wrapper { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-left: 4px solid var(--primary); padding-left: 10px; background: white; padding: 10px; border-radius: 4px; }
         .btn-excluir { background: var(--danger); color: white; border: none; padding: 7px 14px; border-radius: 20px; font-size: 11px; cursor: pointer; font-weight: bold; }
-        .btn-finalizar { width: 100%; max-width: 600px; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 16px; text-transform: uppercase; }
-
-        @media (min-width: 850px) {
-            .cesta { margin-top: 0; width: 320px; position: sticky; top: 10px; max-height: 80vh; overflow-y: auto; }
-        }
+        .btn-finalizar { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 16px; text-transform: uppercase; margin-top: 10px; }
 
         @media (max-width: 849px) {
             .main-wrapper { flex-direction: column; align-items: center; }
             .container { width: 100%; }
-            .coluna-controles { border-left: none; padding-left: 0; align-items: flex-end; }
-            .img-prod { width: 75px; height: 75px; }
-            /* Reposicionamento do balão no mobile dentro da largura-total para ficar acima da observação */
-            .largura-total { flex-direction: column-reverse; }
-            .obs-input { margin-top: 10px; order: 2; }
-            .btn-add { order: 1; }
-            .container-baloes { order: 3; margin-bottom: 5px; }
-            .info-principal { display: none; } /* Oculta o container original no mobile para usar o da largura-total */
+            .cesta { display: none !important; }
+            .img-prod { width: 85px; height: 85px; }
+            .coluna-controles { min-width: 140px; }
         }
     </style>
 </head>
 <body>
 
 <div id="modal-imagem" onclick="this.style.display='none'">
-    <span class="fechar-modal">&times;</span>
     <img id="img-expandida" src="">
 </div>
 
-<div id="notificacao">Item adicionado com sucesso!</div>
+<div id="notificacao">Item adicionado!</div>
 
 <div class="main-wrapper">
     <div class="container">
@@ -138,25 +79,22 @@
             <div class="secao-cadastro">
                 <label class="label-obrigatorio">Nome Completo *</label>
                 <input type="text" id="cliente" class="campo-texto">
-                <label class="label-obrigatorio">Número de Telefone *</label>
+                <label class="label-obrigatorio">Telefone *</label>
                 <input type="tel" id="telefone" class="campo-texto" placeholder="(00) 00000-0000">
                 <label class="label-obrigatorio">Endereço Completo *</label>
                 <input type="text" id="endereco" class="campo-texto">
-                <label class="label-obrigatorio">Forma de Pagamento *</label>
+                <label class="label-obrigatorio">Pagamento *</label>
                 <select id="pagamento" class="select-pagamento">
                     <option value="">Selecione...</option>
                     <option value="PIX">PIX</option>
-                    <option value="Cartão de Crédito">Cartão de Crédito</option>
-                    <option value="Cartão de Débito">Cartão de Débito</option>
+                    <option value="Cartão">Cartão</option>
                 </select>
-                
-                <label class="label-obrigatorio">Enviar Pedido para: *</label>
+                <label class="label-obrigatorio">Enviar para: *</label>
                 <select id="destino-whatsapp" class="select-pagamento">
-                    <option value="5511999448479">Banca da Andreia (+55 11 99944-8479)</option>
-                    <option value="55119949406898">Tão (+55 11 99494-06898)</option>
+                    <option value="5511999448479">Banca da Andreia</option>
+                    <option value="5511949406898">Tão</option>
                 </select>
             </div>
-
             <input type="text" id="busca" class="campo-texto" placeholder="Buscar fruta..." onkeyup="renderizar()">
             <div id="lista"></div>
         </div>
@@ -170,7 +108,7 @@
 </div>
 
 <div id="rodape-finalizar">
-    <button class="btn-finalizar" onclick="processarPedido()">FINALIZAR PEDIDO</button>
+    <button class="btn-finalizar" onclick="processarPedido()" style="max-width: 90%;">FINALIZAR PEDIDO</button>
 </div>
 
 <script>
@@ -178,16 +116,8 @@
     let cesta = [];
 
     function abrirModal(src) {
-        const modal = document.getElementById('modal-imagem');
-        const img = document.getElementById('img-expandida');
-        modal.style.display = "flex";
-        img.src = src;
-    }
-
-    function mostrarNotificacao(texto) {
-        const notif = document.getElementById('notificacao');
-        notif.innerText = texto; notif.style.display = 'block';
-        setTimeout(() => { notif.style.display = 'none'; }, 2500);
+        document.getElementById('modal-imagem').style.display = "flex";
+        document.getElementById('img-expandida').src = src;
     }
 
     function selecionar(tipo, i, valor) {
@@ -204,19 +134,15 @@
     function adicionar(i) {
         let q = parseInt(document.getElementById('q-'+i).value);
         if(q <= 0) return;
-        let nomeItem = document.getElementById('n-'+i).innerText;
-        
         cesta.push({
             idUnico: Date.now(),
             idCatalogo: i,
-            nome: nomeItem,
+            nome: document.getElementById('n-'+i).innerText,
             quantidade: q,
             unidade: document.getElementById('val-u-'+i).value,
             maturacao: document.getElementById('val-m-'+i).value,
             observacao: document.getElementById('obs-'+i).value
         });
-        
-        mostrarNotificacao(`${nomeItem} adicionado!`);
         document.getElementById('q-'+i).value = 0;
         document.getElementById('obs-'+i).value = "";
         atualizarCesta();
@@ -228,55 +154,39 @@
     }
 
     function atualizarCesta() {
-        const box = document.getElementById('cesta-box');
-        const rodape = document.getElementById('rodape-finalizar');
-        
-        if(cesta.length === 0) { 
-            box.style.display = 'none'; rodape.style.display = 'none';
-            document.querySelectorAll('.container-baloes').forEach(el => el.innerHTML = '');
-            return; 
-        }
-        
-        box.style.display = 'block'; rodape.style.display = 'block';
+        const temItens = cesta.length > 0;
+        document.getElementById('cesta-box').style.display = temItens ? 'block' : 'none';
+        document.getElementById('rodape-finalizar').style.display = temItens ? 'block' : 'none';
         
         document.querySelectorAll('.container-baloes').forEach(el => el.innerHTML = '');
         cesta.forEach(it => {
-            // No mobile o balão vai para a div dentro de largura-total, no PC fica na info-principal
-            let container = document.getElementById('baloes-'+it.idCatalogo) || document.getElementById('baloes-mob-'+it.idCatalogo);
+            let container = document.getElementById('baloes-'+it.idCatalogo);
             if(container) {
-                let balao = document.createElement('div');
-                balao.className = 'balao-historico';
-                balao.innerHTML = `<span>${it.quantidade} ${it.unidade}</span><button class="btn-remover-balao" onclick="excluirItem(${it.idUnico})">✕</button>`;
-                container.appendChild(balao);
+                container.innerHTML += `<div class="balao-historico">${it.quantidade} ${it.unidade} <button class="btn-remover-balao" onclick="excluirItem(${it.idUnico})">✕</button></div>`;
             }
         });
 
         document.getElementById('lista-cesta').innerHTML = cesta.map(it => `
             <div class="item-cesta-wrapper">
-                <div>• <b>${it.nome.toUpperCase()}</b> - <b>${it.quantidade} ${it.unidade}</b><br>• ${it.maturacao}<br>${it.observacao ? '• ' + it.observacao : ''}</div>
+                <div>
+                    <b>${it.nome.toUpperCase()}</b><br>
+                    ${it.quantidade} ${it.unidade}<br>
+                    <small>${it.maturacao}</small>
+                </div>
                 <button class="btn-excluir" onclick="excluirItem(${it.idUnico})">EXCLUIR</button>
-            </div>`).join('');
+            </div>
+        `).join('');
     }
 
-    async function processarPedido() {
-        let nome = document.getElementById('cliente').value.trim();
-        let tel = document.getElementById('telefone').value.trim();
-        let end = document.getElementById('endereco').value.trim();
-        let pag = document.getElementById('pagamento').value;
+    function processarPedido() {
+        let nome = document.getElementById('cliente').value;
         let destino = document.getElementById('destino-whatsapp').value;
-
-        if(!nome || !tel || !end || !pag || cesta.length === 0) {
-            alert("ERRO: Preencha todos os dados e adicione itens na cesta.");
-            return;
-        }
-
-        let msg = `*RESUMO DO PEDIDO*\n\n*CLIENTE*\nNOME: ${nome}\nFONE: ${tel}\nEND: ${end}\nPAG: ${pag}\n\n*ITENS*\n`;
-        cesta.forEach(it => {
-            msg += `• *${it.nome.toUpperCase()}* - ${it.quantidade} ${it.unidade}\n• ${it.maturacao}\n${it.observacao ? '• '+it.observacao+'\n' : ''}------------------\n`;
-        });
-
+        if(!nome || cesta.length === 0) { alert("Preencha seu nome e adicione itens."); return; }
+        
+        let msg = `*RESUMO DO PEDIDO*\n\n*CLIENTE:* ${nome}\n*PAGAMENTO:* ${document.getElementById('pagamento').value}\n\n`;
+        cesta.forEach(it => msg += `• *${it.nome}* (${it.quantidade} ${it.unidade}) - ${it.maturacao}\n${it.observacao ? 'Obs: '+it.observacao+'\n' : ''}---\n`);
+        
         window.open(`https://api.whatsapp.com/send?phone=${destino}&text=${encodeURIComponent(msg)}`);
-        cesta = []; atualizarCesta();
     }
 
     function renderizar() {
@@ -288,9 +198,6 @@
                 <div class="item-card">
                     <span class="nome-prod" id="n-${i}">${item.nome}</span>
                     <img src="${item.img}" class="img-prod" onclick="abrirModal('${item.img}')" onerror="this.src='https://via.placeholder.com/80'">
-                    <div class="info-principal">
-                        <div class="container-baloes" id="baloes-${i}"></div>
-                    </div>
                     <div class="coluna-controles">
                         <div class="controles-qtd">
                             <button class="btn-qtd" onclick="qtd(${i},-1)">-</button>
@@ -311,7 +218,7 @@
                         </div>
                     </div>
                     <div class="largura-total">
-                        <div class="container-baloes" id="baloes-mob-${i}"></div>
+                        <div class="container-baloes" id="baloes-${i}"></div>
                         <input type="text" id="obs-${i}" class="obs-input" placeholder="Observação...">
                         <button class="btn-add" onclick="adicionar(${i})">ADICIONAR</button>
                     </div>
