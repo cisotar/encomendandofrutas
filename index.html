@@ -29,7 +29,14 @@
         .item-card { display: flex; flex-wrap: wrap; padding: 15px; margin-bottom: 15px; border: 2px solid #e0e6ed; border-radius: 12px; background: white; gap: 10px; }
         .nome-prod { font-weight: bold; font-size: 18px; color: #2d3436; width: 100%; margin-bottom: 5px; }
 
-        .img-prod { width: 110px; height: 110px; object-fit: cover; border-radius: 10px; cursor: zoom-in; flex-shrink: 0; }
+        .img-prod { 
+            width: 131px; /* Aumentado em 10% (de 110px para 121px) */
+            height: 131px; 
+            object-fit: cover; 
+            border-radius: 10px; 
+            cursor: zoom-in; 
+            flex-shrink: 0; 
+        }
         
         .coluna-controles { flex: 1; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; min-width: 160px; }
         .controles-qtd { display: flex; align-items: center; background: #f1f2f6; border-radius: 8px; padding: 2px; }
@@ -90,10 +97,11 @@
                 </select>
                 <label class="label-obrigatorio">Enviar para: *</label>
                 <select id="destino-whatsapp" class="select-pagamento">
+                    <option value="11949406898">-- Selecione o destinatário</option>
                     <option value="5511999448479">Banca da Andreia</option>
                     <option value="5511996720589">Banca da Inês</option>
                     <option value="5511999400489">Varejão Ki Fruta</option>
-                    <option value="55119949406898">Tão</option>
+                    <option value="5511949406898">Tão</option>
                 </select>
             </div>
             <input type="text" id="busca" class="campo-texto" placeholder="Buscar fruta..." onkeyup="renderizar()">
@@ -125,11 +133,42 @@
         document.querySelectorAll(`.opt-${tipo}-${i}`).forEach(el => el.classList.remove('ativa'));
         event.target.classList.add('ativa');
         document.getElementById(`val-${tipo}-${i}`).value = valor;
+
+        // Se o produto já tiver quantidade maior que zero, atualiza a cesta com a nova opção
+        let q = parseInt(document.getElementById('q-'+i).value || 0);
+        if (q > 0) {
+            atualizarAutomatico(i, q);
+        }
     }
 
     function qtd(i, d) {
         let c = document.getElementById('q-'+i);
-        c.value = Math.max(0, parseInt(c.value || 0) + d);
+        let novoValor = Math.max(0, parseInt(c.value || 0) + d);
+        c.value = novoValor;
+        
+        // Dispara a atualização automática toda vez que clicar no + ou -
+        atualizarAutomatico(i, novoValor);
+    }
+
+    function atualizarAutomatico(i, q) {
+        // Primeiro, removemos o item da cesta se ele já existia (para não duplicar)
+        cesta = cesta.filter(it => it.idCatalogo !== i);
+
+        // Se a nova quantidade for maior que zero, adicionamos ele atualizado
+        if (q > 0) {
+            cesta.push({
+                idUnico: Date.now(),
+                idCatalogo: i,
+                nome: document.getElementById('n-'+i).innerText,
+                quantidade: q,
+                unidade: document.getElementById('val-u-'+i).value,
+                maturacao: document.getElementById('val-m-'+i).value,
+                observacao: document.getElementById('obs-'+i).value
+            });
+        }
+        
+        // Atualiza a visualização da cesta lateral e do rodapé
+        atualizarCesta();
     }
 
     function adicionar(i) {
@@ -149,8 +188,17 @@
         atualizarCesta();
     }
 
-    function excluirItem(idUnico) {
+    function excluirItem(idUnico, idCatalogo) {
+        // Remove o item da lista da cesta
         cesta = cesta.filter(it => it.idUnico !== idUnico);
+        
+        // Procura o campo de quantidade do produto e volta para 0
+        let inputQtd = document.getElementById('q-' + idCatalogo);
+        if (inputQtd) {
+            inputQtd.value = 0;
+        }
+        
+        // Atualiza a visualização para refletir a remoção
         atualizarCesta();
     }
 
@@ -261,11 +309,15 @@
                             <div class="opt-m opt-m-${i}" onclick="selecionar('m',${i},'Verde')">VERDE</div>
                         </div>
                     </div>
+                     
                     <div class="largura-total">
                         <div class="container-baloes" id="baloes-${i}"></div>
                         <input type="text" id="obs-${i}" class="obs-input" placeholder="Observação...">
+                        <!--
                         <button class="btn-add" onclick="adicionar(${i})">ADICIONAR</button>
+                        -->
                     </div>
+                    
                 </div>`;
             }
         });
