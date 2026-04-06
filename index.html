@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-
     <link rel="icon" type="image/jpeg" href="img/logo.jpg">
 
     <meta property="og:title" content="Pedido de Frutas">
@@ -14,7 +13,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pedido de Frutas</title>
+    
     <script src="dados.js"></script>
+    <script src="mensagem.js"></script>
+
     <style>
         :root { --primary: #4361ee; --success: #2ecc71; --danger: #dc3545; --bg: #f8f9fa; }
         body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); margin: 0; padding: 10px; padding-bottom: 90px; }
@@ -39,14 +41,7 @@
         .item-card { display: flex; flex-wrap: wrap; padding: 15px; margin-bottom: 15px; border: 2px solid #e0e6ed; border-radius: 12px; background: white; gap: 10px; }
         .nome-prod { font-weight: bold; font-size: 18px; color: #2d3436; width: 100%; margin-bottom: 5px; }
 
-        .img-prod { 
-            width: 131px; /* Aumentado em 10% (de 110px para 121px) */
-            height: 131px; 
-            object-fit: cover; 
-            border-radius: 10px; 
-            cursor: zoom-in; 
-            flex-shrink: 0; 
-        }
+        .img-prod { width: 131px; height: 131px; object-fit: cover; border-radius: 10px; cursor: zoom-in; flex-shrink: 0; }
         
         .coluna-controles { flex: 1; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; min-width: 160px; }
         .controles-qtd { display: flex; align-items: center; background: #f1f2f6; border-radius: 8px; padding: 2px; }
@@ -144,7 +139,6 @@
         event.target.classList.add('ativa');
         document.getElementById(`val-${tipo}-${i}`).value = valor;
 
-        // Se o produto já tiver quantidade maior que zero, atualiza a cesta com a nova opção
         let q = parseInt(document.getElementById('q-'+i).value || 0);
         if (q > 0) {
             atualizarAutomatico(i, q);
@@ -155,16 +149,12 @@
         let c = document.getElementById('q-'+i);
         let novoValor = Math.max(0, parseInt(c.value || 0) + d);
         c.value = novoValor;
-        
-        // Dispara a atualização automática toda vez que clicar no + ou -
         atualizarAutomatico(i, novoValor);
     }
 
     function atualizarAutomatico(i, q) {
-        // Primeiro, removemos o item da cesta se ele já existia (para não duplicar)
         cesta = cesta.filter(it => it.idCatalogo !== i);
 
-        // Se a nova quantidade for maior que zero, adicionamos ele atualizado
         if (q > 0) {
             cesta.push({
                 idUnico: Date.now(),
@@ -176,8 +166,6 @@
                 observacao: document.getElementById('obs-'+i).value
             });
         }
-        
-        // Atualiza a visualização da cesta lateral e do rodapé
         atualizarCesta();
     }
 
@@ -199,16 +187,9 @@
     }
 
     function excluirItem(idUnico, idCatalogo) {
-        // Remove o item da lista da cesta
         cesta = cesta.filter(it => it.idUnico !== idUnico);
-        
-        // Procura o campo de quantidade do produto e volta para 0
         let inputQtd = document.getElementById('q-' + idCatalogo);
-        if (inputQtd) {
-            inputQtd.value = 0;
-        }
-        
-        // Atualiza a visualização para refletir a remoção
+        if (inputQtd) { inputQtd.value = 0; }
         atualizarCesta();
     }
 
@@ -221,7 +202,7 @@
         cesta.forEach(it => {
             let container = document.getElementById('baloes-'+it.idCatalogo);
             if(container) {
-                container.innerHTML += `<div class="balao-historico">${it.quantidade} ${it.unidade} <button class="btn-remover-balao" onclick="excluirItem(${it.idUnico})">✕</button></div>`;
+                container.innerHTML += `<div class="balao-historico">${it.quantidade} ${it.unidade} <button class="btn-remover-balao" onclick="excluirItem(${it.idUnico}, ${it.idCatalogo})">✕</button></div>`;
             }
         });
 
@@ -232,7 +213,7 @@
                     ${it.quantidade} ${it.unidade}<br>
                     <small>${it.maturacao}</small>
                 </div>
-                <button class="btn-excluir" onclick="excluirItem(${it.idUnico})">EXCLUIR</button>
+                <button class="btn-excluir" onclick="excluirItem(${it.idUnico}, ${it.idCatalogo})">EXCLUIR</button>
             </div>
         `).join('');
     }
@@ -242,23 +223,17 @@
         const tel = document.getElementById('telefone').value;
         const end = document.getElementById('endereco').value;
         const pag = document.getElementById('pagamento').value;
-        const destino = document.getElementById('destino-whatsapp').value;
+        
+        const seletorDestino = document.getElementById('destino-whatsapp');
+        const destinoNumero = seletorDestino.value;
+        const destinoNome = seletorDestino.options[seletorDestino.selectedIndex].text;
 
         if(!nome || !tel || !end || !pag || cesta.length === 0) { 
             alert("Preencha todos os dados e adicione itens."); 
             return; 
         }
 
-        // Dados para a Planilha
-        const dadosPlanilha = {
-            cliente: nome,
-            telefone: tel,
-            endereco: end,
-            pagamento: pag,
-            cesta: cesta
-        };
-
-        // Enviar para a Planilha via Apps Script
+        const dadosPlanilha = { cliente: nome, telefone: tel, endereco: end, pagamento: pag, cesta: cesta };
         fetch("https://script.google.com/macros/s/AKfycbwTMaIf0NbURQRzTvK8_oaup8vrqjJyBPrnLx1dBK8FrmKDvmkGmzqmF9gNo5OUN0M-IA/exec", {
             method: "POST",
             mode: "no-cors",
@@ -266,29 +241,12 @@
             body: JSON.stringify(dadosPlanilha)
         });
 
-        // --- FORMATAÇÃO MODERNA DA MENSAGEM ---
-        let msg = `*NOVO PEDIDO - BANCA DA ANDREIA*\n`;
-        msg += `══════════════════════════════\n\n`;
-        msg += `👤 *Cliente:* ${nome}\n`;
-        msg += `📱 *WhatsApp:* ${tel}\n`;
-        msg += `📍 *Endereço:* ${end}\n`;
-        msg += `💳 *Pagamento:* ${pag}\n\n`;
-        
-        msg += `══════════════════════════════\n`;
-        msg += `🛒 *ITENS DO PEDIDO:*\n\n`;
-        
-        cesta.forEach(it => {
-            msg += `✅ *${it.quantidade}x ${it.nome}*\n`;
-            msg += `└ Unidade: ${it.unidade}\n`;
-            msg += `└ Ponto: ${it.maturacao}\n`;
-            if(it.observacao) msg += `└ 📝 Obs: ${it.observacao}\n`;
-            msg += `\n`;
+        // Chama a função externa do módulo mensagem.js
+        const textoMensagem = montarMensagemWhatsApp({
+            nome, tel, end, pag, destinoNome, cesta
         });
         
-        msg += `══════════════════════════════\n`;
-        msg += `_Pedido gerado via Catálogo Digital_`;
-        
-        window.open(`https://api.whatsapp.com/send?phone=${destino}&text=${encodeURIComponent(msg)}`);
+        window.open(`https://api.whatsapp.com/send?phone=${destinoNumero}&text=${encodeURIComponent(textoMensagem)}`);
     }
 
     function renderizar() {
@@ -319,15 +277,11 @@
                             <div class="opt-m opt-m-${i}" onclick="selecionar('m',${i},'Verde')">VERDE</div>
                         </div>
                     </div>
-                     
                     <div class="largura-total">
                         <div class="container-baloes" id="baloes-${i}"></div>
                         <input type="text" id="obs-${i}" class="obs-input" placeholder="Observação...">
-                        <!--
                         <button class="btn-add" onclick="adicionar(${i})">ADICIONAR</button>
-                        -->
                     </div>
-                    
                 </div>`;
             }
         });
